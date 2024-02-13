@@ -8,12 +8,12 @@ client/dist
 client/tmp
 client/out-tsc
 client/bazel-out
-client/
+
 # Node
 client/node_modules
 client/npm-debug.log
 client/yarn-error.log
-client/
+
 # IDEs and editors
 client/.idea/
 client/.project
@@ -22,7 +22,7 @@ client/.c9/
 client/*.launch
 client/.settings/
 client/*.sublime-workspace
-client/
+
 # Visual Studio Code
 client/.vscode/*
 client/!.vscode/settings.json
@@ -30,7 +30,7 @@ client/!.vscode/tasks.json
 client/!.vscode/launch.json
 client/!.vscode/extensions.json
 client/.history/*
-client/
+
 # Miscellaneous
 client/.angular/cache
 client/.sass-cache/
