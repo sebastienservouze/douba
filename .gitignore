@@ -39,6 +39,7 @@ client/coverage
 client/libpeerconnection.log
 client/testem.log
 client/typings
+
 # System files
 client/.DS_Store
 client/Thumbs.db
