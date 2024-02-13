@@ -8,10 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   
-  helloWorld?: string;
-
-  constructor(httpClient: HttpClient) {
-    httpClient.get('http://localhost:3000').subscribe((response: any) => this.helloWorld = response.toString());
-  }
+  
 
 }

@@ -1,0 +1,29 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h1 {
+        font-size: 6rem;
+        font-weight: 100;
+        font-family: 'passion one';
+
+        .heart {
+            color: var(--text-color);
+        }
+
+        margin: 0;
+    }
+
+    h2 {
+        color: var(--text-color);
+    }
+
+    app-search {
+        width: 512px;
+        max-width: 90%;
+        padding: 10px;
+    }
+}
+
+@media screen and (max) {}
