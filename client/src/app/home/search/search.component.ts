@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class SearchComponent implements OnInit {
 
 	input!: string;
+	suggestions!: string[];
 
 	constructor() { }
 
@@ -15,7 +16,7 @@ export class SearchComponent implements OnInit {
 	}
 
 	search(event: any): void {
-
+		this.suggestions = ['Pamela Rose', 'Le soldat Rayan'];
 	}
 
 }
