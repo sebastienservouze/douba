@@ -6,15 +6,17 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { SearchComponent } from './home/search/search.component';
-import { AutoCompleteModule } from 'primeng/autocomplete';
+import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ResultsComponent } from './home/results/results.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		HomeComponent,
-		SearchComponent
+		SearchComponent,
+		ResultsComponent
 	],
 	imports: [
 		CommonModule,
@@ -22,8 +24,9 @@ import { FormsModule } from '@angular/forms';
 		AppRoutingModule,
 		HttpClientModule,
 		FormsModule,
-		AutoCompleteModule,
+		ReactiveFormsModule,
 		HttpClientModule,
+		InputTextModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent]

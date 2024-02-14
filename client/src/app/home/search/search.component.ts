@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { debounceTime, Subject, switchMap } from "rxjs";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { YggTorrentService } from 'src/app/services/ygg-torrent.service';
 import { Torrent } from '../../../../../common/models/torrent.model';
+import { FormControl } from '@angular/forms';
+import { debounceTime, filter, switchMap } from 'rxjs';
 
 @Component({
     selector: 'app-search',
@@ -10,23 +11,21 @@ import { Torrent } from '../../../../../common/models/torrent.model';
 })
 export class SearchComponent implements OnInit {
 
-    input!: string;
-    suggestions!: Torrent[];
-    search$: Subject<string> = new Subject<string>();
+    @Output() searched = new EventEmitter<Torrent[]>();
+
+    search: FormControl;
 
     constructor(private yggTorrentService: YggTorrentService) {
+        this.search = new FormControl();
     }
 
     ngOnInit(): void {
-        this.search$
-            .pipe(
-                debounceTime(100),
-                switchMap((input: string) => this.yggTorrentService.findTorrents(input))
-            )
-            .subscribe((torrents: Torrent[]) => {
-                this.suggestions = torrents;
-            }
-            );
+        this.search.valueChanges.pipe(
+            debounceTime(10),
+            switchMap((value: string) => this.yggTorrentService.findTorrents(value))
+        ).subscribe((torrents: Torrent[]) => {
+            this.searched.emit(torrents);
+        });
     }
 
 }

@@ -19,10 +19,16 @@
         color: var(--text-color);
     }
 
-    app-search {
-        width: 512px;
+    &__results {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        width: 868px;
         max-width: 90%;
         padding: 10px;
+
+
     }
 }
 

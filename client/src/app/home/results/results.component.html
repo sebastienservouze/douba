@@ -1,0 +1,9 @@
+<div class="results">
+
+    <div class="results__unit" [style.animation]="'fadeIn ' + i / 2 + 's'"
+        *ngFor="let result of results; let i = index">
+        <span>{{result.title}}</span>
+        <span>{{result.size}}</span>
+    </div>
+
+</div>
