@@ -9,12 +9,13 @@ export class MovieService {
         }
     };
 
-    getMovieNames(title: string, page?: number): Promise<string[]> {
+    async findMoviesByTitle(title: string, page?: number): Promise<string[]> {
         let url = `https://moviesdatabase.p.rapidapi.com/titles/search/title/${title}?exact=false`;
         if (page) {
             url += `&page=${page}`;
         }
-        return axios.get(url, this.options)
+
+        return await axios.get(url, this.options)
             .then((response: AxiosResponse<string>) => {
                 return JSON.parse(response.data).map((elem: any) => {
                     return elem.title;
