@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {debounceTime, Subject, switchMap} from "rxjs";
-import {MovieService} from "../../services/movie.service";
+import { Component, OnInit } from '@angular/core';
+import { debounceTime, Subject, switchMap } from "rxjs";
+import { YggTorrentService } from 'src/app/services/ygg-torrent.service';
+import { Torrent } from '../../../../../common/models/torrent.model';
 
 @Component({
     selector: 'app-search',
@@ -10,22 +11,22 @@ import {MovieService} from "../../services/movie.service";
 export class SearchComponent implements OnInit {
 
     input!: string;
-    suggestions!: string[];
+    suggestions!: Torrent[];
     search$: Subject<string> = new Subject<string>();
 
-    constructor(private movieService: MovieService) {
+    constructor(private yggTorrentService: YggTorrentService) {
     }
 
     ngOnInit(): void {
         this.search$
             .pipe(
                 debounceTime(100),
-                switchMap((input: string) => this.movieService.getMovieNames(input))
+                switchMap((input: string) => this.yggTorrentService.findTorrents(input))
             )
-            .subscribe((suggestions: string[]) => {
-                this.suggestions = suggestions;
+            .subscribe((torrents: Torrent[]) => {
+                this.suggestions = torrents;
             }
-        );
+            );
     }
 
 }

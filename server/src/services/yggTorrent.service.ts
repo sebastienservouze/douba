@@ -10,12 +10,12 @@ export class YggTorrentService {
 
     /**
     * Scrap YggTorrent search page to retrieve torrents
-    * @param title
+    * @param terms
     */
-    async findTorrents(title: string): Promise<Torrent[]> {
+    async findTorrents(terms: string): Promise<Torrent[]> {
         await this.findUrl();
 
-        const response = await axios.get(`https://www.${this.yggTorrentUrl}/recherche/${title}`, {
+        const response = await axios.get(`https://www.${this.yggTorrentUrl}/recherche/${terms}`, {
             headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36"
             }
