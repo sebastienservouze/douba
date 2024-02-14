@@ -1,15 +1,13 @@
 import Logger from '../../common/utils/logger'
-import express, {Express} from "express";
-import {Config} from '../config';
-import {MovieController} from './controllers/movie.controller';
+import express, { Express } from "express";
+import { Config } from '../config';
 import cors from 'cors';
-import {YggTorrentController} from "./controllers/yggTorrent.controller";
+import { YggTorrentController } from "./controllers/yggTorrent.controller";
 
 const app: Express = express();
 
-app.use(cors({origin: '*'}));
+app.use(cors({ origin: '*' }));
 
-app.use('/movies', MovieController);
 app.use('/yggtorrent', YggTorrentController);
 
 app.listen(Config.API_PORT, () => {

@@ -3,5 +3,5 @@ export interface Torrent {
     seeds: number;
     leeches: number;
     size: string;
-    magnetLink: string;
+    magnetLink?: string;
 }
