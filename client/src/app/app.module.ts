@@ -23,6 +23,7 @@ import { FormsModule } from '@angular/forms';
 		HttpClientModule,
 		FormsModule,
 		AutoCompleteModule,
+		HttpClientModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent]

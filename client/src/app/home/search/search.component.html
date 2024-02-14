@@ -1,3 +1,4 @@
 <p-autoComplete [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [(ngModel)]="input" [forceSelection]="true"
-    [autoHighlight]="true" [showClear]="true" placeholder="Trouve ton bonheur..." [suggestions]="suggestions"
-    (completeMethod)="search($event)"></p-autoComplete>
+                [autoHighlight]="true" placeholder="Trouve ton bonheur..."
+                [suggestions]="suggestions"
+                (completeMethod)="search$.next($event.query)"></p-autoComplete>
