@@ -2,6 +2,7 @@ import Logger from "../../../common/utils/logger";
 import cheerio from "cheerio";
 import axios from "axios";
 import { Torrent } from '../../../common/models/torrent.model'
+import { TorrentNameDecoder } from "../utils/torrent-name-decoder.utils";
 
 export class YggTorrentService {
 
@@ -25,7 +26,7 @@ export class YggTorrentService {
         const results: Torrent[] = [];
         $('tbody tr').each((i, el) => {
             const line = $(el).text();
-            results.push(this.getTorrent(line))
+            results.push(TorrentNameDecoder.getTorrent(line))
         })
 
         return results;
@@ -47,21 +48,5 @@ export class YggTorrentService {
         Logger.log(`Yggtorrent URL '${this.yggTorrentUrl}'`);
 
         return Promise.resolve();
-    }
-
-    /**
-     * Map Yggtorrent search result row to Torrent model.
-     * @param line 
-     * @returns 
-     */
-    private getTorrent(line: string): Torrent {
-        const splittedLine = line.split('\n');
-
-        return {
-            title: splittedLine[1],
-            size: splittedLine[2],
-            seeds: +splittedLine[3],
-            leeches: +splittedLine[4],
-        }
     }
 }

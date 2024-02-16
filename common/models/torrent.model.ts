@@ -3,5 +3,10 @@ export interface Torrent {
     seeds: number;
     leeches: number;
     size: string;
+    codec?: string;
+    language?: string;
+    quality?: string;
+    rip?: string;
     magnetLink?: string;
+    year?: number;
 }

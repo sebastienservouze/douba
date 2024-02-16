@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Torrent } from '../../../../common/models/torrent.model';
+import { RESULTS_MOCK } from './results/results.mock';
 
 @Component({
 	selector: 'app-home',
@@ -8,20 +9,7 @@ import { Torrent } from '../../../../common/models/torrent.model';
 })
 export class HomeComponent {
 
-	results?: Torrent[] = [
-		{
-			title: 'Star Wars',
-			leeches: 6,
-			seeds: 21,
-			size: '157 MB'
-		},
-		{
-			title: 'Dune',
-			leeches: 12,
-			seeds: 44,
-			size: '644 MB'
-		}
-	];
+	results?: Torrent[] = [];
 
 	onSearch(results: Torrent[]): void {
 		this.results = results

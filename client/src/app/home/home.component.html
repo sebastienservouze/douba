@@ -1,6 +1,6 @@
 <div class="home">
 
-    <h1>Douba <span class="heart">&#10084;</span></h1>
+    <h1>Douba <span [style.color]="'var(--red-600)'">&#10084;</span></h1>
 
     <div class="home__results">
         <app-search (searched)="onSearch($event)"></app-search>

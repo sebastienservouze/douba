@@ -21,7 +21,7 @@ export class SearchComponent implements OnInit {
 
     ngOnInit(): void {
         this.search.valueChanges.pipe(
-            debounceTime(10),
+            debounceTime(100),
             switchMap((value: string) => this.yggTorrentService.findTorrents(value))
         ).subscribe((torrents: Torrent[]) => {
             this.searched.emit(torrents);
