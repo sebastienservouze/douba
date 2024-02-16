@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Torrent } from '../../../../common/models/torrent.model';
+import { TorrentResult } from '../../../../common/models/torrent-result.model';
 import { RESULTS_MOCK } from './results/results.mock';
 
 @Component({
@@ -9,9 +9,9 @@ import { RESULTS_MOCK } from './results/results.mock';
 })
 export class HomeComponent {
 
-	results?: Torrent[] = [];
+	results?: TorrentResult[] = RESULTS_MOCK;
 
-	onSearch(results: Torrent[]): void {
+	onSearch(results: TorrentResult[]): void {
 		this.results = results
 	}
 

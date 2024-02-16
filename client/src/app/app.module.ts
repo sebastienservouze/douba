@@ -10,13 +10,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResultsComponent } from './home/results/results.component';
+import { ResultComponent } from './home/results/result/result.component';
+import { TorrentComponent } from './torrent/torrent.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		HomeComponent,
 		SearchComponent,
-		ResultsComponent
+		ResultsComponent,
+  ResultComponent,
+  TorrentComponent
 	],
 	imports: [
 		CommonModule,

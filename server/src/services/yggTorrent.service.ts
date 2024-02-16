@@ -1,52 +1,70 @@
 import Logger from "../../../common/utils/logger";
 import cheerio from "cheerio";
 import axios from "axios";
-import { Torrent } from '../../../common/models/torrent.model'
+import { TorrentResult } from '../../../common/models/torrent-result.model'
 import { TorrentNameDecoder } from "../utils/torrent-name-decoder.utils";
+import { Speed } from "../../../common/enums/speeds.enum";
+import { Providers } from "../../../common/enums/providers.enum";
 
 export class YggTorrentService {
 
-    readonly googleSearchUrl = 'https://www.google.com/search?q=yggtorrent';
-    yggTorrentUrl: string | null;
+    readonly searchParams = 'description=&file=&uploader=&category=2145&sub_category=all&do=search&order=desc&sort=completed'
 
     /**
     * Scrap YggTorrent search page to retrieve torrents
     * @param terms
     */
-    async findTorrents(terms: string): Promise<Torrent[]> {
-        await this.findUrl();
-
-        const response = await axios.get(`https://www.${this.yggTorrentUrl}/recherche/${terms}`, {
+    async findTorrents(terms: string): Promise<TorrentResult[]> {
+        const response = await axios.get(`${Providers.YggTorrent}/engine/search?name=${terms}&${this.searchParams}`, {
             headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36"
             }
         });
 
         const $ = cheerio.load(response.data);
-        const results: Torrent[] = [];
-        $('tbody tr').each((i, el) => {
-            const line = $(el).text();
-            results.push(TorrentNameDecoder.getTorrent(line))
+        const results: TorrentResult[] = [];
+        $('.table tbody tr').each((i, el) => {
+            const fullName = $(el).children(':nth-child(2)').text().replace('\n', '').trim();
+            const link = $(el).children(':nth-child(2)').children('a').attr()['href'];
+            const fullAge = $(el).children(':nth-child(5)').text().replace('\n', '').trim().split(' ');
+            const age = `${fullAge[1]} ${fullAge[2]}`
+            const size = $(el).children(':nth-child(6)').text().replace('\n', '').trim();
+            const completed = +$(el).children(':nth-child(7)').text().replace('\n', '').trim();
+            const seeds = +$(el).children(':nth-child(8)').text().replace('\n', '').trim();
+            const leechs = +$(el).children(':nth-child(9)').text().replace('\n', '').trim();
+
+            const speed = this.getSpeed(seeds, leechs);
+
+            let torrentResult: TorrentResult = {
+                fullName,
+                link,
+                age,
+                completed,
+                seeds,
+                leechs,
+                size,
+                speed,
+            }
+
+            TorrentNameDecoder.decodeTorrentName(torrentResult);
+
+            results.push(torrentResult)
         })
 
         return results;
     }
 
-    /**
-     * Scrap the twitter page to find the yggTorrent url.
-     * @private
-     */
-    private async findUrl(): Promise<void> {
-        const response = await axios.get(this.googleSearchUrl, {
-            headers: {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36"
-            }
-        });
+    private getSpeed(seeds: number, leechs: number): Speed {
+        const delta = seeds - leechs;
 
-        const $ = cheerio.load(response.data);
-        this.yggTorrentUrl = $('g-inner-card a').html();
-        Logger.log(`Yggtorrent URL '${this.yggTorrentUrl}'`);
+        if (delta < 5) {
+            return Speed.Slow;
+        } else if (delta < 10) {
+            return Speed.Average;
+        } else if (delta < 15) {
+            return Speed.Fast;
+        }
 
-        return Promise.resolve();
+        return Speed.VeryFast;
     }
 }

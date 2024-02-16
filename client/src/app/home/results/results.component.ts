@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Torrent } from '../../../../../common/models/torrent.model';
+import { TorrentResult } from '../../../../../common/models/torrent-result.model';
 
 @Component({
 	selector: 'app-results',
@@ -8,6 +8,6 @@ import { Torrent } from '../../../../../common/models/torrent.model';
 })
 export class ResultsComponent {
 
-	@Input() results?: Torrent[];
+	@Input() results?: TorrentResult[];
 
 }

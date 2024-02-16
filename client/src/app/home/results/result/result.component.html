@@ -1,0 +1,25 @@
+<div class="result" (click)="onClick()">
+
+    <div class="result__infos">
+        <span class="result__infos--title">{{result.fullName}}</span>
+        <div class="result__infos__torrent">
+            <span class="result__infos__torrent--speed" [class.slow]="result.speed === Speed.Slow"
+                [class.average]="result.speed === Speed.Average" [class.fast]="result.speed === Speed.Fast"
+                [class.very-fast]="result.speed === Speed.VeryFast">{{result.speed}}</span> -
+            <span>{{result.size}}</span> -
+            <span>Téléchargé {{result.completed}} fois</span>
+
+        </div>
+    </div>
+
+    <div class="result__tags">
+        <span [ngClass]="result.language" *ngIf="result.language">
+            {{result.language}}
+        </span>
+
+        <span [ngClass]="'q'+result.quality" *ngIf="result.quality">
+            {{result.quality}}
+        </span>
+    </div>
+
+</div>

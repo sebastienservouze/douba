@@ -1,55 +1,18 @@
-import { Torrent } from "../../../common/models/torrent.model";
+import { TorrentResult } from "../../../common/models/torrent-result.model";
 
 export class TorrentNameDecoder {
+
     /**
-     * Map Yggtorrent search result row to Torrent model.
+     * Decode Torrent name to extract infos
      * @param line 
      * @returns 
      */
-    public static getTorrent(line: string): Torrent {
-        const splittedLine = line.split('\n');
-        let fullTitle = splittedLine[1];
-
-        const quality = this.getQuality(fullTitle);
-        if (quality) {
-            fullTitle = fullTitle.replace(new RegExp(quality, 'ig'), '',);
-            if (quality === '4K') {
-                fullTitle = fullTitle.replace(new RegExp('ULTRA HD', 'ig'), '');
-            }
-        }
-
-        const language = this.getLanguage(fullTitle);
-        if (language) {
-            fullTitle = fullTitle.replace(new RegExp(language, 'ig'), '');
-            fullTitle = fullTitle.replace(new RegExp('TRUEFRENCH|FRENCH', 'ig'), '');
-        }
-
-        const rip = this.getRip(fullTitle);
-        if (rip) {
-            fullTitle = fullTitle.replace(new RegExp(rip, 'ig'), '');
-        }
-
-        const year = this.getYear(fullTitle);
-        if (year) {
-            fullTitle = fullTitle.replace(year.toString(), '');
-        }
-
-        const codec = this.getCodec(fullTitle);
-        if (codec) {
-            fullTitle = fullTitle.replace(new RegExp(codec, 'ig'), '');
-        }
-
-
-        return {
-            title: fullTitle.trim(),
-            size: splittedLine[2],
-            seeds: +splittedLine[3],
-            leeches: +splittedLine[4],
-            quality,
-            language,
-            rip,
-            year,
-        }
+    public static decodeTorrentName(torrentResult: TorrentResult): void {
+        torrentResult.quality = this.getQuality(torrentResult.fullName);
+        torrentResult.language = this.getLanguage(torrentResult.fullName);
+        torrentResult.rip = this.getRip(torrentResult.fullName);
+        torrentResult.year = this.getYear(torrentResult.fullName);
+        torrentResult.codec = this.getCodec(torrentResult.fullName);
     }
 
     private static getQuality(fullTitle: string): string | undefined {
@@ -75,6 +38,7 @@ export class TorrentNameDecoder {
             'FRENCH',
             'TRUEFRENCH',
             'VOSTFR',
+            'VOST',
             'MULTI'
         ];
 
@@ -83,7 +47,10 @@ export class TorrentNameDecoder {
             if (fullTitle.toUpperCase().includes(l)) {
                 if (l === 'TRUEFRENCH' || l === 'FRENCH') {
                     language = 'VF'
-                } else {
+                } else if (l === 'VOST') {
+                    language = 'VOSTFR'
+                }
+                else {
                     language = l;
                 }
             }
@@ -135,4 +102,6 @@ export class TorrentNameDecoder {
 
         return codec;
     }
+
+
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { YggTorrentService } from 'src/app/services/ygg-torrent.service';
-import { Torrent } from '../../../../../common/models/torrent.model';
+import { TorrentResult } from '../../../../../common/models/torrent-result.model';
 import { FormControl } from '@angular/forms';
 import { debounceTime, filter, switchMap } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { debounceTime, filter, switchMap } from 'rxjs';
 })
 export class SearchComponent implements OnInit {
 
-    @Output() searched = new EventEmitter<Torrent[]>();
+    @Output() searched = new EventEmitter<TorrentResult[]>();
 
     search: FormControl;
 
@@ -21,9 +21,9 @@ export class SearchComponent implements OnInit {
 
     ngOnInit(): void {
         this.search.valueChanges.pipe(
-            debounceTime(100),
+            debounceTime(200),
             switchMap((value: string) => this.yggTorrentService.findTorrents(value))
-        ).subscribe((torrents: Torrent[]) => {
+        ).subscribe((torrents: TorrentResult[]) => {
             this.searched.emit(torrents);
         });
     }

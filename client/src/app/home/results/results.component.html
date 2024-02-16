@@ -1,33 +1,6 @@
 <div *ngIf="results?.length" class="results">
 
-    <div class="results__unit" [class.even]="even" [style.animation]="'fadeIn ' + i / 2 + 's'"
-        *ngFor="let result of results; let i = index; let even = even">
-
-        <div class="results__unit__infos">
-            <span class="results__unit__infos--title">{{result.title}}</span>
-            <div class="results__unit__infos__torrent">
-                <span class="results__unit__infos__torrent--size">{{result.size}}</span> -
-                <span class="results__unit__infos__torrent--seeds">{{result.seeds}}</span> |
-                <span class="results__unit__infos__torrent--leeches">{{result.leeches}}</span>
-            </div>
-        </div>
-
-
-        <div class="results__unit__tags">
-
-            <span [ngClass]="result.language" *ngIf="result.language">
-                {{result.language}}
-            </span>
-
-            <span [ngClass]="'q'+result.quality" *ngIf="result.quality">
-                {{result.quality}}
-            </span>
-
-            <span [ngClass]="result.rip" *ngIf="result.rip">
-                {{result.rip}}
-            </span>
-
-        </div>
-    </div>
+    <app-result *ngFor="let result of results; let i = index; let even = even" [class.even]="even"
+        [result]="result"></app-result>
 
 </div>
