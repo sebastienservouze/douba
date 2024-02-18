@@ -1,1 +1,4 @@
-<input pInputText [formControl]="search" placeholder="Trouve ton bonheur...">
+<div class="search">
+    <input pInputText [formControl]="search" placeholder="Trouve ton bonheur...">
+    <div *ngIf="loading" class="custom-loader"></div>
+</div>

@@ -9,7 +9,14 @@ YggTorrentController.get('/:title', async (req, res) => {
     Logger.log(`GET /yggtorrent/${req.params.title}`)
     return res
         .status(200)
-        .json(await service.findTorrents(req.params.title));
+        .json(await service.find(req.params.title));
+})
+
+YggTorrentController.get('/page/:url', async (req, res) => {
+    Logger.log(`GET /yggtorrent/${req.params.url}`)
+    return res
+        .status(200)
+        .json(await service.findPage(req.params.url));
 })
 
 export { YggTorrentController }

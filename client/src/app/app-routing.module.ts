@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { TorrentComponent } from './torrent/torrent.component';
+import { PageComponent } from './page/page.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: ':link', component: TorrentComponent }
+  { path: 'page/:url', component: PageComponent }
 ];
 
 @NgModule({

@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResultsComponent } from './home/results/results.component';
 import { ResultComponent } from './home/results/result/result.component';
-import { TorrentComponent } from './torrent/torrent.component';
+import { PageComponent } from './page/page.component';
 
 @NgModule({
 	declarations: [
@@ -19,8 +19,8 @@ import { TorrentComponent } from './torrent/torrent.component';
 		HomeComponent,
 		SearchComponent,
 		ResultsComponent,
-  ResultComponent,
-  TorrentComponent
+		ResultComponent,
+		PageComponent
 	],
 	imports: [
 		CommonModule,

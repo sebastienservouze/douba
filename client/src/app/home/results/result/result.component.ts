@@ -18,7 +18,7 @@ export class ResultComponent {
 	constructor(private router: Router) { }
 
 	onClick() {
-		const linkUrl = this.result.link?.replace(/\//g, '|');
-		this.router.navigate([linkUrl]);
+		const pageUrl = this.result.url?.replace(/\//g, '|');
+		this.router.navigate(['page', pageUrl]);
 	}
 }
