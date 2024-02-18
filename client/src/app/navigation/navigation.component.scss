@@ -1,0 +1,33 @@
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .25rem;
+
+    h1 {
+        font-size: 3rem;
+        font-weight: 100;
+        font-family: 'passion one';
+
+        margin: 0;
+    }
+
+    .icons {
+        display: flex;
+        gap: 1rem;
+
+        i {
+            font-size: 2rem;
+            font-weight: 600;
+            padding: .5rem 0;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: filter .1s;
+
+            &:hover {
+                filter: brightness(1.5);
+            }
+        }
+
+    }
+}

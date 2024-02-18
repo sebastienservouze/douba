@@ -4,16 +4,11 @@
 
     app-result {
         display: block;
-        cursor: pointer;
         background-color: var(--surface-card);
         border-radius: 4px;
 
         &.even {
             background-color: var(--gray-900);
-        }
-
-        &:hover {
-            filter: brightness(1.5);
         }
     }
 

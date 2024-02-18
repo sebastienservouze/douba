@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { TorrentResult } from '../../../../common/models/torrent-result.model'
-import { TorrentPage } from '../../../../common/models/torrent-page.model'
 
 @Injectable({
 	providedIn: 'root'
@@ -16,8 +15,8 @@ export class YggTorrentService {
 		return this.httpClient.get<TorrentResult[]>(`http://localhost:3000/yggtorrent/${terms}`);
 	}
 
-	findPage(url: string): Observable<TorrentPage> {
-		return this.httpClient.get<TorrentPage>(`http://localhost:3000/yggtorrent/page/${url}`);
+	download(url: string): Observable<void> {
+		return this.httpClient.get<void>(`http://localhost:3000/yggtorrent/download/${url}`);
 	}
 
 }

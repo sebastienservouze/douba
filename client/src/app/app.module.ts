@@ -11,7 +11,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResultsComponent } from './home/results/results.component';
 import { ResultComponent } from './home/results/result/result.component';
-import { PageComponent } from './page/page.component';
+import { DownloadsComponent } from './downloads/downloads.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 @NgModule({
 	declarations: [
@@ -20,7 +21,8 @@ import { PageComponent } from './page/page.component';
 		SearchComponent,
 		ResultsComponent,
 		ResultComponent,
-		PageComponent
+		DownloadsComponent,
+		NavigationComponent,
 	],
 	imports: [
 		CommonModule,

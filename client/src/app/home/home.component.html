@@ -1,10 +1,8 @@
 <div class="home">
 
-    <h1>Douba <span [style.color]="'var(--red-600)'">&#10084;</span></h1>
-
     <div class="home__results">
         <app-search (searched)="onSearch($event)"></app-search>
-        <app-results [results]="results"></app-results>
+        <app-results *ngIf="results" [results]="results"></app-results>
     </div>
 
 </div>

@@ -1,4 +1,4 @@
-<div class="result" (click)="onClick()">
+<div class="result">
 
     <div class="result__infos">
         <span class="result__infos--title">{{result.fullName}}</span>
@@ -7,19 +7,19 @@
                 [class.average]="result.speed === Speed.Average" [class.fast]="result.speed === Speed.Fast"
                 [class.very-fast]="result.speed === Speed.VeryFast">{{result.speed}}</span> -
             <span>{{result.size}}</span> -
-            <span>Téléchargé {{result.completed}} fois</span>
+            <span>Téléchargé {{result.completed}} fois</span> -
+            <a [href]="result.url">YggTorrent</a>
+        </div>
+        <div class="result__infos--tags">
+            <span [ngClass]="result.language" *ngIf="result.language">
+                {{result.language}}
+            </span>
 
+            <span [ngClass]="'q'+result.quality" *ngIf="result.quality">
+                {{result.quality}}
+            </span>
         </div>
     </div>
 
-    <div class="result__tags">
-        <span [ngClass]="result.language" *ngIf="result.language">
-            {{result.language}}
-        </span>
-
-        <span [ngClass]="'q'+result.quality" *ngIf="result.quality">
-            {{result.quality}}
-        </span>
-    </div>
-
+    <i class="pi pi-download"></i>
 </div>

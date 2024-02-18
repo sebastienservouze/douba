@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { PageComponent } from './page/page.component';
+import { DownloadsComponent } from './downloads/downloads.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'page/:url', component: PageComponent }
+  { path: 'recherche', component: HomeComponent },
+  { path: 'telechargements', component: DownloadsComponent },
+  { path: '**', redirectTo: 'recherche' }
 ];
 
 @NgModule({

@@ -16,9 +16,4 @@ export class ResultComponent {
 	readonly Speed = Speed;
 
 	constructor(private router: Router) { }
-
-	onClick() {
-		const pageUrl = this.result.url?.replace(/\//g, '|');
-		this.router.navigate(['page', pageUrl]);
-	}
 }
