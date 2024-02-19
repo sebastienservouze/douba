@@ -1,11 +1,9 @@
-import Logger from "../../../common/utils/logger";
 import cheerio from "cheerio";
 import axios from "axios";
-import { TorrentResult } from '../../../common/models/torrent-result.model'
-import { TorrentPage } from '../../../common/models/torrent-page.model'
-import { TorrentNameDecoder } from "../utils/torrent-name-decoder.utils";
-import { Speed } from "../../../common/enums/speeds.enum";
-import { Providers } from "../../../common/enums/providers.enum";
+import {TorrentResult} from '../../../common/models/torrent-result.model'
+import {TorrentNameDecoder} from "../utils/torrent-name-decoder.utils";
+import {Speed} from "../../../common/enums/speeds.enum";
+import {Providers} from "../../../common/enums/providers.enum";
 
 export class YggTorrentService {
 
@@ -53,32 +51,6 @@ export class YggTorrentService {
         })
 
         return results;
-    }
-
-    async findPage(url: string): Promise<TorrentPage> {
-        url = url.replace(/\|/g, '/');
-        const response = await axios.get(url, {
-            headers: {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36"
-            }
-        });
-
-        const $ = cheerio.load(response.data);
-
-        const name = $('h1').text();
-        let description = $('.content .default').html();
-
-        // Suppression des tailles sur les images
-        if (description) {
-            console.log(description);
-            console.log(description.match(/width="\d+"|height="\d+"/g));
-            description = description.replace(/width="\d+"|height="\d+"/g, '');
-        }
-
-        return {
-            name,
-            description: description!
-        }
     }
 
     private getSpeed(seeds: number, leechs: number): Speed {
