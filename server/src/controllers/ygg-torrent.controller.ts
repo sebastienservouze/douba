@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { YggTorrentService } from "../services/yggTorrent.service";
+import { YggTorrentService } from "../services/ygg-torrent.service";
 import Logger from "../../../common/utils/logger";
 
 const YggTorrentController = Router();

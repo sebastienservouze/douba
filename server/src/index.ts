@@ -2,7 +2,7 @@ import Logger from '../../common/utils/logger'
 import express, { Express } from "express";
 import { Config } from '../config';
 import cors from 'cors';
-import { YggTorrentController } from "./controllers/yggTorrent.controller";
+import { YggTorrentController } from "./controllers/ygg-torrent.controller";
 
 const app: Express = express();
 
