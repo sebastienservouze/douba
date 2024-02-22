@@ -6,6 +6,7 @@ import { TorrentNameDecoder } from "../utils/torrent-name-decoder.utils.js";
 import { ByteUtils } from "../utils/bytes.utils.js";
 import { TimeUtils } from "../utils/time.utils.js";
 import { readFileSync, writeFileSync } from 'fs'
+import { MagnetUtils } from "../utils/magnet.utils.js";
 
 const { Logger } = log;
 
@@ -24,9 +25,8 @@ export class DownloadService {
             path: `${Config.DOWNLOAD_PATH}/downloads`
         });
 
-        const magnets = JSON.parse(readFileSync(`${Config.DOWNLOAD_PATH}/magnets.json`, 'utf-8'));
-        if (!magnets.includes(magnet)) {
-            this.storeMagnet(magnet);
+        if (MagnetUtils.get().includes(magnet)) {
+            MagnetUtils.store(magnet);
         }
 
         torrent.on('done', () => Logger.log(`Le téléchargement du Torrent '${torrent.name}' est terminé`));

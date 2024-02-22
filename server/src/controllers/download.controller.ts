@@ -5,6 +5,7 @@ import { Config } from "../../config.js";
 import { IncomingMessage } from "http";
 import log from "../../../common/utils/logger.js";
 import { readFileSync } from "fs";
+import { MagnetUtils } from "../utils/magnet.utils.js";
 
 const { Logger } = log;
 
@@ -21,7 +22,7 @@ const delay = 200;
 
 // Récupération des torrents existants
 const magnets = JSON.parse(readFileSync(`${Config.DOWNLOAD_PATH}/magnets.json`, 'utf-8'));
-magnets.forEach((magnet: string) => {
+MagnetUtils.get().forEach((magnet: string) => {
     service.Download(magnet);
 });
 
