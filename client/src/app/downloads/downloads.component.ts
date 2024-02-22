@@ -9,12 +9,12 @@ import { Download } from '../../../../common/models/download.model';
 })
 export class DownloadsComponent {
 
-	downloads?: Download[] = [
+	downloads?: Download[]/* = [
 		{
 			downloadSpeed: '36.73 MB',
 			fileName: "EUPHORIA.US.S01.MULTI.1080p.10.BITS.X265.WEBrip-Frosties",
 			progress: 0.5636788357972967,
-			remainingTime: 8207.824869189863,
+			remainingTime: '2min37',
 			totalSize: "263.64 MB",
 			uploadSpeed: "55.3 KB",
 			language: 'MULTI',
@@ -24,18 +24,17 @@ export class DownloadsComponent {
 			downloadSpeed: '36.73 MB',
 			fileName: "EUPHORIA.US.S01.MULTI.1080p.10.BITS.X265.WEBrip-Frosties",
 			progress: 1,
-			remainingTime: 8207.824869189863,
+			remainingTime: '0s',
 			totalSize: "263.64 MB",
 			uploadSpeed: "55.3 KB",
 			language: 'MULTI',
 			quality: '1080P'
 		}
-	];
+	];*/
 
 	constructor(private downloadService: DownloadService) {
 		this.downloadService.ws$.subscribe((downloads: Download[]) => {
 			this.downloads = downloads;
-			console.log(downloads);
 		});
 	}
 

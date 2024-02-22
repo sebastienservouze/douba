@@ -4,23 +4,40 @@ import log from "../../../common/utils/logger.js";
 import { Download } from '../../../common/models/download.model.js';
 import { TorrentNameDecoder } from "../utils/torrent-name-decoder.utils.js";
 import { ByteUtils } from "../utils/bytes.utils.js";
+import { TimeUtils } from "../utils/time.utils.js";
+import { readFileSync, writeFileSync } from 'fs'
 
 const { Logger } = log;
 
 export class DownloadService {
 
-    readonly client = new WebTorrent();
+    readonly client = new WebTorrent({
+        downloadLimit: 1024 * 1024 * 10
+    });
 
     constructor() {
-        this.client.on('torrent', (torrent: Torrent) => {
-            Logger.log(`Le Torrent ${torrent.name} est prêt`)
-        })
+        this.client.on('torrent', (torrent: Torrent) => Logger.log(`Le Torrent '${torrent.name}' est prêt`));
     }
 
-    async Download(magnet: string): Promise<Torrent> {
-        return this.client.add(magnet, {
-            path: Config.DOWNLOAD_PATH
+    Download(magnet: string): Torrent {
+        const torrent = this.client.add(magnet, {
+            path: `${Config.DOWNLOAD_PATH}/downloads`
         });
+
+        const magnets = JSON.parse(readFileSync(`${Config.DOWNLOAD_PATH}/magnets.json`, 'utf-8'));
+        if (!magnets.includes(magnet)) {
+            this.storeMagnet(magnet);
+        }
+
+        torrent.on('done', () => Logger.log(`Le téléchargement du Torrent '${torrent.name}' est terminé`));
+
+        return torrent;
+    }
+
+    storeMagnet(magnet: string): void {
+        const magnets = JSON.parse(readFileSync(`${Config.DOWNLOAD_PATH}/magnets.json`, 'utf-8'));
+        magnets.push(magnet);
+        writeFileSync(`${Config.DOWNLOAD_PATH}/magnets.json`, JSON.stringify(magnets, null, 4));
     }
 
     getActives(): Download[] {
@@ -34,7 +51,7 @@ export class DownloadService {
         download.downloadSpeed = ByteUtils.formatBytes(torrent.downloadSpeed);
         download.totalSize = ByteUtils.formatBytes(torrent.length);
         download.progress = torrent.progress;
-        download.remainingTime = torrent.timeRemaining;
+        download.remainingTime = TimeUtils.format(torrent.timeRemaining);
         download.uploadSpeed = ByteUtils.formatBytes(torrent.uploadSpeed);
         download.language = TorrentNameDecoder.getLanguage(torrent.name);
         download.quality = TorrentNameDecoder.getQuality(torrent.name);

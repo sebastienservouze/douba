@@ -23,6 +23,8 @@
                 [class.completed--text]="download.progress === 1">{{download.totalSize}}</span></span>
         <span *ngIf="download.progress < 1">Vitesse <span
                 class="download__infos__advanced--speed">{{download.downloadSpeed}}/s</span></span>
+        <span *ngIf="download.progress < 1">Temps restant <span
+                class="download__infos__advanced--speed">{{download.remainingTime}}</span></span>
     </div>
     <p-progressBar [class.completed--background]="download.progress === 1"
         [value]="download.progress * 100 | number: '1.0-0'"></p-progressBar>
