@@ -1,12 +1,13 @@
-import Logger from '../../common/utils/logger'
 import express, { Express } from "express";
-import { Config } from '../config';
+import { Config } from '../config.js';
 import cors from 'cors';
-import { YggTorrentController } from "./controllers/ygg-torrent.controller";
-import { DownloadController } from './controllers/download.controller';
+import { YggTorrentController } from "./controllers/ygg-torrent.controller.js";
+import { DownloadController } from './controllers/download.controller.js';
+import log from "../../common/utils/logger.js";
+const { Logger } = log;
 
 const app: Express = express();
-
+app.use(express.json())
 app.use(cors({ origin: '*' }));
 
 app.use('/yggtorrent', YggTorrentController);

@@ -1,1 +1,3 @@
-<p>downloads works!</p>
+<div class="downloads" *ngIf="downloads">
+    <app-download *ngFor="let download of downloads" [download]="download"></app-download>
+</div>

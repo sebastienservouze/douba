@@ -1,4 +1,4 @@
-export default class Logger {
+export class Logger {
 
     public static log(message?: string, ...optionalParams: any[]): void {
         if (optionalParams.length) {

@@ -14,6 +14,8 @@ import { ResultComponent } from './home/results/result/result.component';
 import { DownloadsComponent } from './downloads/downloads.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { ButtonModule } from 'primeng/button';
+import { DownloadComponent } from './downloads/download/download.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @NgModule({
 	declarations: [
@@ -24,6 +26,7 @@ import { ButtonModule } from 'primeng/button';
 		ResultComponent,
 		DownloadsComponent,
 		NavigationComponent,
+		DownloadComponent,
 	],
 	imports: [
 		CommonModule,
@@ -35,6 +38,7 @@ import { ButtonModule } from 'primeng/button';
 		HttpClientModule,
 		InputTextModule,
 		ButtonModule,
+		ProgressBarModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent]

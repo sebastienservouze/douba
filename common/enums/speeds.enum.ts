@@ -1,4 +1,4 @@
-export enum Speed {
+export const enum Speed {
     Slow = 'Lent',
     Average = 'Moyen',
     Fast = 'Rapide',

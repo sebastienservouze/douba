@@ -1,14 +1,57 @@
-.result {
+p-progressBar {
+    width: 100%;
+
+    .p-progressbar {
+        border-radius: 4px;
+        height: 20px;
+        width: 100%;
+
+        .p-progressbar-label {
+            display: inline-flex !important;
+            font-family: 'Hanken Grotesk';
+            color: var(--text-color);
+        }
+    }
+}
+
+hr {
+    width: 100%;
+    border-color: var(--primary-color);
+    margin: 0;
+}
+
+.completed--border {
+    border-color: var(--yellow-300) !important;
+}
+
+.completed--text {
+    color: var(--yellow-300) !important;
+}
+
+.completed--background {
+    background-color: var(--yellow-300) !important;
+    color: black;
+
+    .p-progressbar-value {
+        background-color: var(--yellow-300) !important;
+    }
+}
+
+.download {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: relative;
+    flex-direction: column;
     width: 100%;
     padding: .75rem;
-    gap: 5px;
+    border-radius: 4px;
+    gap: 10px;
+    border: solid 1px var(--primary-color);
+    background-color: var(--surface-card);
 
     i {
+        position: absolute;
+        right: .75rem;
         font-size: 1.5rem;
-        padding: 1rem;
         color: var(--primary-color);
         font-weight: 600;
         cursor: pointer;
@@ -21,11 +64,16 @@
 
     &__infos {
         display: flex;
+        width: 100%;
         gap: 5px;
         flex-direction: column;
         word-wrap: break-word;
         white-space: pre-wrap;
         word-break: break-word;
+
+        &--title {
+            width: 90%;
+        }
 
         &--tags {
             display: flex;
@@ -91,29 +139,20 @@
             }
         }
 
-        &__torrent {
+        &__advanced {
+            display: flex;
+            flex-direction: column;
             color: var(--gray-300);
-            font-size: .75rem;
+
+            &--size {
+                color: var(--primary-color);
+            }
 
             &--speed {
-
-                &.slow {
-                    color: var(--red-700);
-                }
-
-                &.average {
-                    color: var(--orange-700);
-                }
-
-                &.fast {
-                    color: var(--green-600);
-                }
-
-                &.very-fast {
-                    color: var(--green-400);
-                }
+                color: var(--primary-color);
             }
         }
+
 
     }
 }

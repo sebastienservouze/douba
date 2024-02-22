@@ -1,8 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { TorrentResult } from '../../../../../../common/models/torrent-result.model';
-import { Speed } from '../../../../../../common/enums/speeds.enum';
-import { Providers } from '../../../../../../common/enums/providers.enum';
-import { Router } from '@angular/router';
+import * as Speed from '../../../../../../common/enums/speeds.enum';
 
 @Component({
 	selector: 'app-result',
@@ -13,7 +11,5 @@ export class ResultComponent {
 
 	@Input() result!: TorrentResult;
 
-	readonly Speed = Speed;
-
-	constructor(private router: Router) { }
+	Speed = (Speed as any).Speed;
 }

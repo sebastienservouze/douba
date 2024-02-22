@@ -9,9 +9,6 @@ export interface TorrentResult {
     age: string;
     size: string;
     url?: string;
-    codec?: string;
     language?: string;
     quality?: string;
-    rip?: string;
-    year?: number;
 }
