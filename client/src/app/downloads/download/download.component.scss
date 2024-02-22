@@ -22,18 +22,22 @@ hr {
 
 .completed--border {
     border-color: var(--yellow-300) !important;
+    transition: border-color .25s;
 }
 
 .completed--text {
     color: var(--yellow-300) !important;
+    transition: color .25s;
 }
 
 .completed--background {
     background-color: var(--yellow-300) !important;
     color: black;
+    transition: background-color .25s, text-color .25s;
 
     .p-progressbar-value {
         background-color: var(--yellow-300) !important;
+        transition: background-color .25s;
     }
 }
 

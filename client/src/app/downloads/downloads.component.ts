@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DownloadService } from '../services/download.service';
 import { Download } from '../../../../common/models/download.model';
+import { ByteUtils } from '../../../../common/utils/bytes.utils';
 
 @Component({
 	selector: 'app-downloads',
@@ -35,7 +36,16 @@ export class DownloadsComponent {
 	constructor(private downloadService: DownloadService) {
 		this.downloadService.ws$.subscribe((downloads: Download[]) => {
 			this.downloads = downloads;
+
+			let totalDownload = 0;
+			let totalUpload = 0;
+			this.downloads.forEach((download: Download) => {
+				totalDownload += download.downloaded;
+				totalUpload += download.uploaded;
+			})
 		});
+
+		this.downloadService.refresh();
 	}
 
 

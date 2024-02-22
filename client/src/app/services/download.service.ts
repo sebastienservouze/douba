@@ -17,4 +17,8 @@ export class DownloadService {
 		this.ws = new WebSocketSubject(`ws://localhost:8080`);
 		this.ws$ = this.ws.asObservable();
 	}
+
+	refresh(): void {
+		this.ws.next([]);
+	}
 }
