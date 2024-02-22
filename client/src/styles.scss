@@ -11,6 +11,26 @@ body {
     animation: fadeIn 1s;
 }
 
+button {
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 4px !important;
+    padding: 0 1rem;
+    font-family: 'Hanken Grotesk';
+    font-size: 1rem;
+    transition: filter .1s;
+    cursor: pointer;
+
+    &:hover {
+        filter: brightness(1.2);
+    }
+
+    &:active {
+        filter: brightness(0.8);
+    }
+
+}
+
 h1,
 h2,
 h3,

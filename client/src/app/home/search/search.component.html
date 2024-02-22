@@ -1,4 +1,10 @@
 <div class="search">
-    <input pInputText [formControl]="search" placeholder="Trouve ton bonheur...">
-    <div *ngIf="loading" class="custom-loader"></div>
+
+    <div class="search__input">
+        <input pInputText [formControl]="search" placeholder="Trouve ton bonheur..." (keypress)="onKeyPressed($event)">
+        <div *ngIf="loading" class="custom-loader"></div>
+    </div>
+
+    <button (click)="onSearchClicked()">Rechercher</button>
+
 </div>

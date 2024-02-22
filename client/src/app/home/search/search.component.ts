@@ -9,7 +9,7 @@ import { debounceTime, filter, switchMap, tap } from 'rxjs';
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent {
 
     @Output() searched = new EventEmitter<TorrentResult[]>();
 
@@ -20,15 +20,18 @@ export class SearchComponent implements OnInit {
         this.search = new FormControl();
     }
 
-    ngOnInit(): void {
-        this.search.valueChanges.pipe(
-            tap(() => this.loading = true),
-            debounceTime(200),
-            switchMap((value: string) => this.yggTorrentService.find(value))
-        ).subscribe((torrents: TorrentResult[]) => {
+    onSearchClicked() {
+        this.loading = true;
+        this.yggTorrentService.find(this.search.value).subscribe((torrents: TorrentResult[]) => {
             this.loading = false;
             this.searched.emit(torrents);
         });
+    }
+
+    onKeyPressed(event: KeyboardEvent) {
+        if (event.key === 'Enter') {
+            this.onSearchClicked();
+        }
     }
 
 }

@@ -13,6 +13,7 @@ import { ResultsComponent } from './home/results/results.component';
 import { ResultComponent } from './home/results/result/result.component';
 import { DownloadsComponent } from './downloads/downloads.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
 	declarations: [
@@ -33,6 +34,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 		ReactiveFormsModule,
 		HttpClientModule,
 		InputTextModule,
+		ButtonModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent]

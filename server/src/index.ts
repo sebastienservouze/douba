@@ -3,12 +3,14 @@ import express, { Express } from "express";
 import { Config } from '../config';
 import cors from 'cors';
 import { YggTorrentController } from "./controllers/ygg-torrent.controller";
+import { DownloadController } from './controllers/download.controller';
 
 const app: Express = express();
 
 app.use(cors({ origin: '*' }));
 
 app.use('/yggtorrent', YggTorrentController);
+app.use('/download', DownloadController);
 
 app.listen(Config.API_PORT, () => {
     Logger.log(`Le serveur écoute sur le port http://localhost:${Config.API_PORT}`);
