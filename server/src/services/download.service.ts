@@ -72,10 +72,6 @@ export class DownloadService {
             this.broadcastDownloads();
         });
 
-        torrent.on('upload', () => {
-
-        })
-
         // Quand le torrent est terminé, met à jour la BDD et envoi les infos aux clients
         torrent.on('done', () => {
             Logger.log(`Le téléchargement du Torrent '${torrent.name}' est terminé`);

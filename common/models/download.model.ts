@@ -11,6 +11,7 @@ export interface Download {
     uploaded: number;
     totalSize: string;
     paused: boolean;
+    done: boolean;
     alreadyDownloaded: boolean;
     quality?: string;
     language?: string;

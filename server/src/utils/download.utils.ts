@@ -28,6 +28,7 @@ export class DownloadUtils {
         download.remainingTime = TimeUtils.format(torrent.timeRemaining);
         download.language = TorrentNameDecoder.getLanguage(torrent.name);
         download.quality = TorrentNameDecoder.getQuality(torrent.name);
+        download.done = torrent.done;
 
         return download;
     }
