@@ -1,6 +1,6 @@
 export class ByteUtils {
 
-    static formatBytes(bytes: number, decimals = 2) {
+    static format(bytes: number, decimals = 2) {
         if (!+bytes) return '0 Bytes'
 
         const k = 1024

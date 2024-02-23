@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DownloadService } from '../services/download.service';
 import { Download } from '../../../../common/models/download.model';
 import { ByteUtils } from '../../../../common/utils/bytes.utils';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'app-downloads',
 	templateUrl: './downloads.component.html',
 	styleUrls: ['./downloads.component.scss']
 })
-export class DownloadsComponent {
+export class DownloadsComponent implements OnInit, OnDestroy {
 
+	destroy$: Subject<void> = new Subject();
 	downloads?: Download[]/* = [
 		{
 			downloadSpeed: '36.73 MB',
@@ -34,19 +36,23 @@ export class DownloadsComponent {
 	];*/
 
 	constructor(private downloadService: DownloadService) {
-		this.downloadService.ws$.subscribe((downloads: Download[]) => {
-			this.downloads = downloads;
 
-			let totalDownload = 0;
-			let totalUpload = 0;
-			this.downloads.forEach((download: Download) => {
-				totalDownload += download.downloaded;
-				totalUpload += download.uploaded;
-			})
-		});
-
-		this.downloadService.refresh();
 	}
 
+	ngOnInit(): void {
+		this.downloadService.getAll().subscribe((downloads: Download[]) => {
+			this.downloads = downloads;
 
+			this.downloadService.ws$.pipe(takeUntil(this.destroy$)).subscribe((downloads: Download[]) => {
+				downloads.forEach((download: Download) => {
+					const index = downloads.findIndex((d: Download) => d.hash === download.hash);
+					this.downloads![index] = download;
+				})
+			});
+		})
+	}
+
+	ngOnDestroy(): void {
+		this.destroy$.next();
+	}
 }
