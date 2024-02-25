@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DownloadService } from '../services/download.service';
-import { Download } from '../../../../common/models/download.model';
-import { ByteUtils } from '../../../../common/utils/bytes.utils';
-import { Subject, takeUntil } from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {DownloadService} from '../services/download.service';
+import {Download} from '../../../../common/models/download.model';
+import {Subject, takeUntil} from 'rxjs';
 
 @Component({
 	selector: 'app-downloads',
@@ -45,8 +44,14 @@ export class DownloadsComponent implements OnInit, OnDestroy {
 
 			this.downloadService.ws$.pipe(takeUntil(this.destroy$)).subscribe((downloads: Download[]) => {
 				downloads.forEach((download: Download) => {
-					const index = downloads.findIndex((d: Download) => d.hash === download.hash);
-					this.downloads![index] = download;
+					const index = this.downloads!.findIndex((d: Download) => d.hash === download.hash);
+          if (index > -1) {
+            this.downloads![index] = download;
+          }
+          else {
+            console.log('Nouveau torrent !')
+            this.downloads?.push(download);
+          }
 				})
 			});
 		})

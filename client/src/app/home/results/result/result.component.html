@@ -21,5 +21,6 @@
         </div>
     </div>
 
-    <i class="pi pi-download"></i>
+    <i *ngIf="!result.downloaded" class="pi pi-download" (click)="onDownloadClicked()"></i>
+
 </div>

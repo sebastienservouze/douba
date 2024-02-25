@@ -8,6 +8,8 @@ export interface TorrentResult {
     speed: Speed;
     age: string;
     size: string;
+    downloaded: boolean;
+    id: number;
     url?: string;
     language?: string;
     quality?: string;

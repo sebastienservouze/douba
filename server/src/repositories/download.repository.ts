@@ -4,7 +4,7 @@ import { Config } from "../../config.js";
 
 export class DownloadRepository {
 
-    static readonly PATH = `${Config.DOWNLOAD_PATH}/downloads.json`;
+    static readonly PATH = `${Config.BASE_PATH}/downloads.json`;
 
     insert(download: Download): void {
         const downloads = this.getAll();

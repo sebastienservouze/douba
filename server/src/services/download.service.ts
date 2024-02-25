@@ -1,19 +1,15 @@
-import { Config } from "../../config.js";
-import WebTorrent from "webtorrent";
+import {Config} from "../../config.js";
+import WebTorrent, {Torrent} from "webtorrent";
 import log from "../../../common/utils/logger.js";
-import { Download } from '../../../common/models/download.model.js';
-import { Ratio } from '../../../common/models/ratio.model.js';
-import { DownloadUtils } from "../utils/download.utils.js";
-import WebSocket, { WebSocketServer } from "ws";
-import { IncomingMessage } from "http";
-import { DownloadRepository } from "../repositories/download.repository.js";
-import { readFileSync, writeFileSync } from "fs";
+import {Download} from '../../../common/models/download.model.js';
+import {DownloadUtils} from "../utils/download.utils.js";
+import WebSocket, {WebSocketServer} from "ws";
+import {IncomingMessage} from "http";
+import {Singletons} from "../singletons.js";
 
 const { Logger } = log;
 
 export class DownloadService {
-
-    readonly repository = new DownloadRepository();
 
     readonly client = new WebTorrent({
         downloadLimit: 1024 * 1024 * 100
@@ -29,7 +25,7 @@ export class DownloadService {
         this.wss.on('listening', () => Logger.log(`La websocket écoute sur le port ${Config.WSS_PORT}`))
 
         // Récupère les torrents NON completés en bdd et relance leur téléchargement
-        this.repository
+        Singletons.DownloadRepository
             .getAll()
             .filter((download: Download) => download.progress < 1)
             .forEach((download: Download) => {
@@ -37,7 +33,7 @@ export class DownloadService {
             });
 
         // Gère la communication avec les clients
-        this.wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
+        this.wss.on('connection', (ws: WebSocket) => {
             Logger.log(`Client connecté à la WebSocket`);
 
             ws.on('message', () => {
@@ -50,32 +46,33 @@ export class DownloadService {
 
         // Envoi régulièrement aux clients les téléchargements si il y en a
         setInterval(() => {
-            if (this.client.torrents.length) {
+            if (this.client.torrents.length && this.client.torrents.some((torrent: Torrent) => torrent.ready)) {
                 this.broadcastDownloads();
             }
         }, this.updateDelay);
     }
 
-    download(magnet: string): boolean {
-        if (this.repository.exists((download: Download) => download.hash === magnet.substring(20, 60))) {
-            return false;
-        }
-
-        const torrent = this.client.add(magnet, {
-            path: `${Config.DOWNLOAD_PATH}/downloads`
+    download(torrentFile: any): boolean {
+        const torrent = this.client.add(torrentFile, {
+            path: `${Config.BASE_PATH}/downloads`
         });
 
         // Quand le torrent est prêt, l'ajoute à la BDD si il n'y est pas déjà et envoi les infos aux clients
         torrent.on('ready', () => {
+            if (Singletons.DownloadRepository.exists((download: Download) => download.hash === torrent.infoHash)) {
+                this.client.remove(torrent);
+                return false;
+            }
+
             Logger.log(`Ajout du torrent ${torrent.name} aux téléchargement`)
-            this.repository.insert(DownloadUtils.torrentToDownload(torrent));
+            Singletons.DownloadRepository.insert(DownloadUtils.torrentToDownload(torrent));
             this.broadcastDownloads();
         });
 
         // Quand le torrent est terminé, met à jour la BDD et envoi les infos aux clients
         torrent.on('done', () => {
             Logger.log(`Le téléchargement du Torrent '${torrent.name}' est terminé`);
-            this.repository.update(DownloadUtils.torrentToDownload(torrent));
+            Singletons.DownloadRepository.update(DownloadUtils.torrentToDownload(torrent));
             this.broadcastDownloads();
             this.client.remove(torrent);
         });
@@ -84,7 +81,7 @@ export class DownloadService {
     }
 
     getAll(): Download[] {
-        return this.repository.getAll();
+        return Singletons.DownloadRepository.getAll();
     }
 
     broadcastDownloads() {

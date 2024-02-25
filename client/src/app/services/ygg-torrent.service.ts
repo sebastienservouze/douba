@@ -15,8 +15,8 @@ export class YggTorrentService {
 		return this.httpClient.get<TorrentResult[]>(`http://localhost:3000/yggtorrent/${terms}`);
 	}
 
-	download(url: string): Observable<void> {
-		return this.httpClient.get<void>(`http://localhost:3000/yggtorrent/download/${url}`);
-	}
+  download(id: number): Observable<void> {
+    return this.httpClient.get<void>(`http://localhost:3000/yggtorrent/download/${id}`);
+  }
 
 }
