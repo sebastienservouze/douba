@@ -1,10 +1,10 @@
 import { readFileSync, writeFileSync } from "fs";
 import { Download } from "../../../common/models/download.model.js";
-import { Config } from "../../config.js";
+import { Config } from "../../../config/config.js";
 
 export class DownloadRepository {
 
-    static readonly PATH = `${Config.BASE_PATH}/downloads.json`;
+    static readonly PATH = `${Config.basePath}/downloads.json`;
 
     insert(download: Download): void {
         const downloads = this.getAll();

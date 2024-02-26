@@ -3,6 +3,7 @@ import {WebSocketSubject} from 'rxjs/webSocket';
 import {Download} from '../../../../common/models/download.model';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {Config} from "../../../../config/config";
 
 
 @Injectable({
@@ -15,11 +16,11 @@ export class DownloadService {
   ws$: Observable<Download[]>;
 
   constructor(private httpClient: HttpClient) {
-    this.ws = new WebSocketSubject(`ws://localhost:8080`);
+    this.ws = new WebSocketSubject(`ws://localhost:${Config.wssPort}`);
     this.ws$ = this.ws.asObservable();
   }
 
   getAll(): Observable<Download[]> {
-    return this.httpClient.get<Download[]>(`http://localhost:3000/download/`);
+    return this.httpClient.get<Download[]>(`http://localhost:${Config.apiPort}/download/`);
   }
 }

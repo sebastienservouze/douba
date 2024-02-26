@@ -1,4 +1,4 @@
-import {Config} from "../../config.js";
+import {Config} from "../../../config/config.js";
 import WebTorrent, {Torrent} from "webtorrent";
 import log from "../../../common/utils/logger.js";
 import {Download} from '../../../common/models/download.model.js';
@@ -16,13 +16,13 @@ export class DownloadService {
     });
 
     readonly wss = new WebSocketServer({
-        port: Config.WSS_PORT
+        port: Config.wssPort
     })
 
     updateDelay: number = 200;
 
     constructor() {
-        this.wss.on('listening', () => Logger.log(`La websocket écoute sur le port ${Config.WSS_PORT}`))
+        this.wss.on('listening', () => Logger.log(`La websocket écoute sur le port ${Config.wssPort}`))
 
         // Récupère les torrents NON completés en bdd et relance leur téléchargement
         Singletons.DownloadRepository
@@ -54,7 +54,7 @@ export class DownloadService {
 
     download(torrentFile: any): boolean {
         const torrent = this.client.add(torrentFile, {
-            path: `${Config.BASE_PATH}/downloads`
+            path: `${Config.basePath}/downloads`
         });
 
         // Quand le torrent est prêt, l'ajoute à la BDD si il n'y est pas déjà et envoi les infos aux clients

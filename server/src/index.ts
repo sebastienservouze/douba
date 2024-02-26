@@ -1,5 +1,5 @@
 import express, { Express } from "express";
-import { Config } from '../config.js';
+import { Config } from '../../config/config.js';
 import cors from 'cors';
 import { YggTorrentController } from "./controllers/ygg-torrent.controller.js";
 import { DownloadController } from './controllers/download.controller.js';
@@ -13,8 +13,8 @@ app.use(cors({ origin: '*' }));
 app.use('/yggtorrent', YggTorrentController);
 app.use('/download', DownloadController);
 
-app.listen(Config.API_PORT, () => {
-    Logger.log(`Le serveur écoute sur le port http://localhost:${Config.API_PORT}`);
+app.listen(Config.apiPort, () => {
+    Logger.log(`Le serveur écoute sur le port http://localhost:${Config.apiPort}`);
 });
 
 delete process.env['http_proxy'];

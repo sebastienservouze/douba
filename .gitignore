@@ -1,5 +1,6 @@
 # All
 node_modules
+config/credentials.ts
 
 # Client
 

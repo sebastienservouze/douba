@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
-import { Config } from "../../config.js";
+import { Config } from "../../../config/config.js";
 import { Download } from "../../../common/models/download.model.js";
 import { Torrent } from "webtorrent";
 import byte from "../../../common/utils/bytes.utils.js";

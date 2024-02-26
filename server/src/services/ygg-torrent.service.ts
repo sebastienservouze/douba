@@ -7,7 +7,8 @@ import {Providers} from "../../../common/enums/providers.enum.js";
 import {Download} from "../../../common/models/download.model.js";
 import {Singletons} from "../singletons.js";
 import * as fs from "fs";
-import {Config} from "../../config.js";
+import {Config} from "../../../config/config.js";
+import {Credentials} from "../../../config/credentials.js";
 
 export class YggTorrentService {
 
@@ -61,7 +62,7 @@ export class YggTorrentService {
             },
         });
 
-        fs.writeFileSync(`${Config.BASE_PATH}/torrents/${id}.torrent`, response.data);
+        fs.writeFileSync(`${Config.basePath}/torrents/${id}.torrent`, response.data);
 
         return response.data;
     }
