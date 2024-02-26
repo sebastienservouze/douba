@@ -1,16 +1,18 @@
-import { readFileSync, writeFileSync } from "fs";
-import { Config } from "../../../config/config.js";
-import { Download } from "../../../common/models/download.model.js";
-import { Torrent } from "webtorrent";
+import {Download} from "../../../common/models/download.model.js";
+import {Torrent} from "webtorrent";
 import byte from "../../../common/utils/bytes.utils.js";
 import time from "../../../common/utils/time.utils.js";
-import { TorrentNameDecoder } from "./torrent-name-decoder.utils.js";
+import {TorrentNameDecoder} from "./torrent-name-decoder.utils.js";
 
 const { ByteUtils } = byte;
 const { TimeUtils } = time;
 
 export class DownloadUtils {
 
+    /**
+     * Convert a torrent to a download object, ready to be sent to the client.
+     * @param torrent
+     */
     static torrentToDownload(torrent: Torrent): Download {
         const download = {} as Download;
 

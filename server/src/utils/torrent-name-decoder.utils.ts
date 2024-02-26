@@ -1,5 +1,9 @@
 export class TorrentNameDecoder {
 
+    /**
+     * Get the quality of a torrent from its full title.
+     * @param fullTitle
+     */
     public static getQuality(fullTitle: string): string | undefined {
         const qualities = [
             '720P',
@@ -18,6 +22,10 @@ export class TorrentNameDecoder {
         return quality;
     }
 
+    /**
+     * Get the language of a torrent from its full title.
+     * @param fullTitle
+     */
     public static getLanguage(fullTitle: string): string | undefined {
         const languages = [
             'FRENCH',

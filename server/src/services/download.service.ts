@@ -4,10 +4,9 @@ import log from "../../../common/utils/logger.js";
 import {Download} from '../../../common/models/download.model.js';
 import {DownloadUtils} from "../utils/download.utils.js";
 import WebSocket, {WebSocketServer} from "ws";
-import {IncomingMessage} from "http";
 import {Singletons} from "../singletons.js";
 
-const { Logger } = log;
+const {Logger} = log;
 
 export class DownloadService {
 
@@ -22,9 +21,7 @@ export class DownloadService {
     updateDelay: number = 200;
 
     constructor() {
-        this.wss.on('listening', () => Logger.log(`La websocket écoute sur le port ${Config.wssPort}`))
-
-        // Récupère les torrents NON completés en bdd et relance leur téléchargement
+        // Get uncompleted downloads from the database and start them
         Singletons.DownloadRepository
             .getAll()
             .filter((download: Download) => download.progress < 1)
@@ -32,7 +29,17 @@ export class DownloadService {
                 this.download(download.magnet);
             });
 
-        // Gère la communication avec les clients
+        this.handleWebsocket();
+    }
+
+    /**
+     * Handle the websocket server.
+     * Broadcasts the active downloads to the clients.
+     */
+    handleWebsocket() {
+        this.wss.on('listening', () => Logger.log(`La websocket écoute sur le port ${Config.wssPort}`))
+
+        // Websocket interactions
         this.wss.on('connection', (ws: WebSocket) => {
             Logger.log(`Client connecté à la WebSocket`);
 
@@ -44,7 +51,7 @@ export class DownloadService {
             ws.on('error', (err: Error) => Logger.error('Une erreur est survenue au niveau de la WebSocket', err));
         })
 
-        // Envoi régulièrement aux clients les téléchargements si il y en a
+        // Regularly send updates of active downloads to the clients
         setInterval(() => {
             if (this.client.torrents.length && this.client.torrents.some((torrent: Torrent) => torrent.ready)) {
                 this.broadcastDownloads();
@@ -52,6 +59,13 @@ export class DownloadService {
         }, this.updateDelay);
     }
 
+    /**
+     * Add a torrent to the torrent client and start the download.
+     * When the torrent is ready, add it to the database if it's not already there and send the info to the clients.
+     * If the torrent is already in the database, don't add it and return false.
+     * When the torrent is done, update the database and send the info to the clients.
+     * @param torrentFile
+     */
     download(torrentFile: any): boolean {
         const torrent = this.client.add(torrentFile, {
             path: `${Config.basePath}/downloads`
@@ -80,10 +94,16 @@ export class DownloadService {
         return true;
     }
 
+    /**
+     * Get all the downloads
+     */
     getAll(): Download[] {
         return Singletons.DownloadRepository.getAll();
     }
 
+    /**
+     * Broadcast the active downloads to the clients
+     */
     broadcastDownloads() {
         this.wss.clients.forEach((ws: WebSocket) => {
             ws.send(JSON.stringify(this.client.torrents.map(DownloadUtils.torrentToDownload)));
