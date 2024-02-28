@@ -5,12 +5,19 @@ import {TorrentNameDecoder} from "../utils/torrent-name-decoder.utils.js";
 import {Speed} from "../../../common/enums/speeds.enum.js";
 import {Providers} from "../../../common/enums/providers.enum.js";
 import {Download} from "../../../common/models/download.model.js";
-import {Singletons} from "../singletons.js";
 import * as fs from "fs";
-import {Config} from "../../../config/config.js";
-import {Credentials} from "../../../config/credentials.js";
+import config from "../../../config/config.js";
+import credentials from "../../../config/credentials.js";
+import {DownloadService} from "./download.service.js";
+import {Injectable} from "@decorators/di";
 
+const {Config} = config;
+const {Credentials} = credentials;
+
+@Injectable()
 export class YggTorrentService {
+
+    constructor(private readonly downloadService?:DownloadService) {}
 
     readonly searchParams = 'description=&file=&uploader=&category=2145&sub_category=all&do=search&order=desc&sort=completed'
 
@@ -48,13 +55,17 @@ export class YggTorrentService {
             }
         });
 
+        if (response.status !== 200) {
+            throw new Error('Erreur lors de l\'accès à YggTorrent');
+        }
+
         const $ = cheerio.load(response.data);
         const results: TorrentResult[] = [];
         $('.table tbody tr').each((i, el) => {
             const torrentResult = {} as TorrentResult;
 
             torrentResult.fullName = $(el).children(':nth-child(2)').text().replace('\n', '').trim();
-            torrentResult.downloaded = Singletons.DownloadRepository.exists((download: Download) => download.fileName === torrentResult.fullName);
+            torrentResult.downloaded = this.downloadService!.getDownloads().some((download: Download) => download.fileName === torrentResult.fullName);
             torrentResult.url = $(el).children(':nth-child(2)').children('a').attr()['href'];
             torrentResult.size = $(el).children(':nth-child(6)').text().replace('\n', '').trim();
             torrentResult.completed = +$(el).children(':nth-child(7)').text().replace('\n', '').trim();
@@ -103,6 +114,8 @@ export class YggTorrentService {
 
         return response.data;
     }
+
+
 
     /**
      * Get the speed of the torrent

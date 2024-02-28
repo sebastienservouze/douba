@@ -1,34 +1,30 @@
-import {Config} from "../../../config/config.js";
+import config from "../../../config/config.js";
 import WebTorrent, {Torrent} from "webtorrent";
 import log from "../../../common/utils/logger.js";
-import {Download} from '../../../common/models/download.model.js';
 import {DownloadUtils} from "../utils/download.utils.js";
 import WebSocket, {WebSocketServer} from "ws";
-import {Singletons} from "../singletons.js";
+import {Download} from "../../../common/models/download.model.js";
+import {Injectable} from "@decorators/di";
 
 const {Logger} = log;
+const {Config} = config;
 
+@Injectable()
 export class DownloadService {
 
-    readonly client = new WebTorrent({
-        downloadLimit: 1024 * 1024 * 100
+    readonly maxDownloadMb: number = 10;
+    updateDelay: number = 200;
+
+    readonly client: WebTorrent.Instance = new WebTorrent({
+        // @ts-ignore
+        downloadLimit: 1024 * 1024 * this.maxDownloadMb
     });
 
-    readonly wss = new WebSocketServer({
+    readonly wss: WebSocketServer = new WebSocketServer({
         port: Config.wssPort
     })
 
-    updateDelay: number = 200;
-
     constructor() {
-        // Get uncompleted downloads from the database and start them
-        Singletons.DownloadRepository
-            .getAll()
-            .filter((download: Download) => download.progress < 1)
-            .forEach((download: Download) => {
-                this.download(download.magnet);
-            });
-
         this.handleWebsocket();
     }
 
@@ -42,11 +38,6 @@ export class DownloadService {
         // Websocket interactions
         this.wss.on('connection', (ws: WebSocket) => {
             Logger.log(`Client connecté à la WebSocket`);
-
-            ws.on('message', () => {
-                this.broadcastDownloads()
-                Logger.log(`Client demande raffraichissement`);
-            });
 
             ws.on('error', (err: Error) => Logger.error('Une erreur est survenue au niveau de la WebSocket', err));
         })
@@ -66,39 +57,22 @@ export class DownloadService {
      * When the torrent is done, update the database and send the info to the clients.
      * @param torrentFile
      */
-    download(torrentFile: any): boolean {
+    startDownload(torrentFile: any): void {
         const torrent = this.client.add(torrentFile, {
             path: `${Config.basePath}/downloads`
         });
 
-        // Quand le torrent est prêt, l'ajoute à la BDD si il n'y est pas déjà et envoi les infos aux clients
+        // Quand le torrent est prêt envoie les infos aux clients
         torrent.on('ready', () => {
-            if (Singletons.DownloadRepository.exists((download: Download) => download.hash === torrent.infoHash)) {
-                this.client.remove(torrent);
-                return false;
-            }
-
             Logger.log(`Ajout du torrent ${torrent.name} aux téléchargement`)
-            Singletons.DownloadRepository.insert(DownloadUtils.torrentToDownload(torrent));
             this.broadcastDownloads();
         });
 
         // Quand le torrent est terminé, met à jour la BDD et envoi les infos aux clients
         torrent.on('done', () => {
             Logger.log(`Le téléchargement du Torrent '${torrent.name}' est terminé`);
-            Singletons.DownloadRepository.update(DownloadUtils.torrentToDownload(torrent));
             this.broadcastDownloads();
-            this.client.remove(torrent);
         });
-
-        return true;
-    }
-
-    /**
-     * Get all the downloads
-     */
-    getAll(): Download[] {
-        return Singletons.DownloadRepository.getAll();
     }
 
     /**
@@ -108,5 +82,12 @@ export class DownloadService {
         this.wss.clients.forEach((ws: WebSocket) => {
             ws.send(JSON.stringify(this.client.torrents.map(DownloadUtils.torrentToDownload)));
         })
+    }
+
+    /**
+     * Get the active downloads
+     */
+    getDownloads(): Download[] {
+        return this.client.torrents.map(DownloadUtils.torrentToDownload);
     }
 }
