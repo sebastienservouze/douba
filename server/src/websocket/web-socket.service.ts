@@ -19,13 +19,6 @@ export class WebSocketService {
 
     constructor() {
         this.webSocketServer.on('listening', () => Logger.log(`La websocket écoute sur le port ${Config.wssPort}`))
-        this.webSocketServer.on('connection', (ws: WebSocket) => {
-            const dummy: Dummy = {
-                foo: 'bar',
-                bar: 'foo',
-            }
-            this.broadcast(PacketType.Dummy, dummy);
-        });
     }
 
     broadcast(packetType: PacketType, data: any): void {
