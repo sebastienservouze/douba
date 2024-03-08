@@ -18,8 +18,8 @@ export class WebSocketService {
 
     listen<T>(type: PacketType): Observable<T> {
         return this.ws.pipe(
-            filter((packet: Packet<any>) => packet.type === type),
-            map((packet: Packet<any>) => packet.payload as T)
+            filter((packet: Packet<T>) => packet.type === type),
+            map((packet: Packet<T>) => packet.payload)
         );
     }
 }
