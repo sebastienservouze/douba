@@ -1,8 +1,13 @@
+import {PacketType} from "../enums/packets.enum";
+
 export class Packet<T> {
 
-    data: T;
+    type: PacketType;
+    payload: T;
 
-    constructor(data: T) {
-        this.data = data;
+    constructor(type: PacketType, payload: T) {
+        this.type = type;
+        this.payload = payload;
     }
+
 }

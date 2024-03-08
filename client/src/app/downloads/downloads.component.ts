@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Download} from '../../../../common/models/download.model';
 import {Subject, takeUntil} from 'rxjs';
 import {WebSocketService} from "../services/web-socket.service";
+import {PacketType} from "../../../../common/enums/packets.enum";
 
 @Component({
     selector: 'app-downloads',
@@ -38,7 +39,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.webSocketService.listen<Download[]>()
+        this.webSocketService.listen<Download[]>(PacketType.Download)
             .pipe(takeUntil(this.destroy$))
             .subscribe((downloads: Download[]) => {
                 this.downloads = downloads;

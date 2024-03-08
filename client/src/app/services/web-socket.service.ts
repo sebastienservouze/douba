@@ -1,9 +1,11 @@
 import {Injectable} from '@angular/core';
 import {WebSocketSubject} from "rxjs/webSocket";
 import {Config} from "../../../../config/config";
-import {Observable, of} from "rxjs";
-import {Packet} from "../../../../common/models/packet.model";
+import {filter, map, Observable} from "rxjs";
 import {Download} from "../../../../common/models/download.model";
+import {Dummy} from "../../../../common/models/dummy.model";
+import {Packet} from "../../../../common/models/packet.model";
+import {PacketType} from "../../../../common/enums/packets.enum";
 
 @Injectable({
     providedIn: 'root'
@@ -14,13 +16,12 @@ export class WebSocketService {
 
     constructor() {
         this.ws = new WebSocketSubject(`ws://localhost:${Config.wssPort}`);
-        this.listen<Download>().subscribe(console.log);
     }
 
-    listen<T>(): Observable<T> {
-        // @ts-ignore
-        const type = ({} as T).constructor.name;
-        console.log(type);
-        return of({} as T);
+    listen<T>(type: PacketType): Observable<T> {
+        return this.ws.pipe(
+            filter((packet: Packet<any>) => packet.type === type),
+            map((packet: Packet<any>) => packet.payload as T)
+        );
     }
 }
