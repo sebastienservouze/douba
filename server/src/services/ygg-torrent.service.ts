@@ -9,19 +9,25 @@ import * as fs from "fs";
 import config from "../../../config/config.js";
 import credentials from "../../../config/credentials.js";
 import {DownloadService} from "./download.service.js";
-import {Injectable} from "@decorators/di";
+import {Dependency} from "../di/dependency.js";
 
 const {Config} = config;
 const {Credentials} = credentials;
 
-@Injectable()
+@Dependency()
 export class YggTorrentService {
 
-    constructor(private readonly downloadService?:DownloadService) {}
+    constructor(private readonly downloadService: DownloadService) {
+    }
 
     readonly searchParams = 'description=&file=&uploader=&category=2145&sub_category=all&do=search&order=desc&sort=completed'
 
     cookie: string;
+
+    async test(): Promise<string> {
+        console.log('test');
+        return 'test';
+    }
 
     /**
      * Login to YggTorrent, store the cookie
@@ -88,10 +94,19 @@ export class YggTorrentService {
     }
 
     /**
+     * Download the torrent file and start the download in the client
+     * @param id
+     */
+    async download(id: string): Promise<void> {
+        const torrent = await this.getTorrent(id);
+        await this.downloadService.startDownload(torrent);
+    }
+
+    /**
      * Get & store the torrent file (requires login)
      * @param id
      */
-    async getTorrent(id: string): Promise<any> {
+    private async getTorrent(id: string): Promise<any> {
         if (!this.cookie) {
             await this.login();
         }
@@ -114,7 +129,6 @@ export class YggTorrentService {
 
         return response.data;
     }
-
 
 
     /**

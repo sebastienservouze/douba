@@ -2,14 +2,14 @@ import config from "../../../config/config.js";
 import WebTorrent, {Torrent} from "webtorrent";
 import log from "../../../common/utils/logger.js";
 import {DownloadUtils} from "../utils/download.utils.js";
-import WebSocket, {WebSocketServer} from "ws";
 import {Download} from "../../../common/models/download.model.js";
-import {Injectable} from "@decorators/di";
+import {WebSocketService} from "../websocket/web-socket.service.js";
+import {Dependency} from "../di/dependency.js";
 
 const {Logger} = log;
 const {Config} = config;
 
-@Injectable()
+@Dependency()
 export class DownloadService {
 
     readonly maxDownloadMb: number = 10;
@@ -20,32 +20,13 @@ export class DownloadService {
         downloadLimit: 1024 * 1024 * this.maxDownloadMb
     });
 
-    readonly wss: WebSocketServer = new WebSocketServer({
-        port: Config.wssPort
-    })
-
-    constructor() {
-        this.handleWebsocket();
-    }
-
-    /**
-     * Handle the websocket server.
-     * Broadcasts the active downloads to the clients.
-     */
-    handleWebsocket() {
-        this.wss.on('listening', () => Logger.log(`La websocket écoute sur le port ${Config.wssPort}`))
-
-        // Websocket interactions
-        this.wss.on('connection', (ws: WebSocket) => {
-            Logger.log(`Client connecté à la WebSocket`);
-
-            ws.on('error', (err: Error) => Logger.error('Une erreur est survenue au niveau de la WebSocket', err));
-        })
+    constructor(private webSocketService: WebSocketService) {
+        console.log('hi');
 
         // Regularly send updates of active downloads to the clients
         setInterval(() => {
             if (this.client.torrents.length && this.client.torrents.some((torrent: Torrent) => torrent.ready)) {
-                this.broadcastDownloads();
+                this.webSocketService.broadcast(this.getDownloads());
             }
         }, this.updateDelay);
     }
@@ -65,23 +46,14 @@ export class DownloadService {
         // Quand le torrent est prêt envoie les infos aux clients
         torrent.on('ready', () => {
             Logger.log(`Ajout du torrent ${torrent.name} aux téléchargement`)
-            this.broadcastDownloads();
+            this.webSocketService.broadcast(this.getDownloads());
         });
 
         // Quand le torrent est terminé, met à jour la BDD et envoi les infos aux clients
         torrent.on('done', () => {
             Logger.log(`Le téléchargement du Torrent '${torrent.name}' est terminé`);
-            this.broadcastDownloads();
+            this.webSocketService.broadcast(this.getDownloads());
         });
-    }
-
-    /**
-     * Broadcast the active downloads to the clients
-     */
-    broadcastDownloads() {
-        this.wss.clients.forEach((ws: WebSocket) => {
-            ws.send(JSON.stringify(this.client.torrents.map(DownloadUtils.torrentToDownload)));
-        })
     }
 
     /**

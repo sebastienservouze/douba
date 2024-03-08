@@ -1,17 +1,17 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {DownloadService} from '../services/download.service';
 import {Download} from '../../../../common/models/download.model';
 import {Subject, takeUntil} from 'rxjs';
+import {WebSocketService} from "../services/web-socket.service";
 
 @Component({
-	selector: 'app-downloads',
-	templateUrl: './downloads.component.html',
-	styleUrls: ['./downloads.component.scss']
+    selector: 'app-downloads',
+    templateUrl: './downloads.component.html',
+    styleUrls: ['./downloads.component.scss']
 })
 export class DownloadsComponent implements OnInit, OnDestroy {
 
-	destroy$: Subject<void> = new Subject();
-	downloads?: Download[]/* = [
+    destroy$: Subject<void> = new Subject();
+    downloads?: Download[]/* = [
 		{
 			downloadSpeed: '36.73 MB',
 			fileName: "EUPHORIA.US.S01.MULTI.1080p.10.BITS.X265.WEBrip-Frosties",
@@ -34,30 +34,18 @@ export class DownloadsComponent implements OnInit, OnDestroy {
 		}
 	];*/
 
-	constructor(private downloadService: DownloadService) {
+    constructor(private webSocketService: WebSocketService) {
+    }
 
-	}
+    ngOnInit(): void {
+        this.webSocketService.listen<Download[]>()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((downloads: Download[]) => {
+                this.downloads = downloads;
+            });
+    }
 
-	ngOnInit(): void {
-		this.downloadService.getAll().subscribe((downloads: Download[]) => {
-			this.downloads = downloads;
-
-			this.downloadService.ws$.pipe(takeUntil(this.destroy$)).subscribe((downloads: Download[]) => {
-				downloads.forEach((download: Download) => {
-					const index = this.downloads!.findIndex((d: Download) => d.hash === download.hash);
-          if (index > -1) {
-            this.downloads![index] = download;
-          }
-          else {
-            console.log('Nouveau torrent !')
-            this.downloads?.push(download);
-          }
-				})
-			});
-		})
-	}
-
-	ngOnDestroy(): void {
-		this.destroy$.next();
-	}
+    ngOnDestroy(): void {
+        this.destroy$.next();
+    }
 }

@@ -12,8 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@decorators/di": "^3.1.0",
-    "@decorators/express": "^3.0.0",
     "axios": "^1.6.7",
     "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
@@ -28,6 +26,7 @@
     "@types/node": "^20.11.17",
     "@types/webtorrent": "^0.109.7",
     "@types/ws": "^8.5.10",
+    "reflect-metadata": "^0.2.1",
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"

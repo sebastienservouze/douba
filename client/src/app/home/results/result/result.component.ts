@@ -1,25 +1,25 @@
-import { Component, Input } from '@angular/core';
-import { TorrentResult } from '../../../../../../common/models/torrent-result.model';
+import {Component, Input} from '@angular/core';
+import {TorrentResult} from '../../../../../../common/models/torrent-result.model';
 import * as Speed from '../../../../../../common/enums/speeds.enum';
-import { YggTorrentService } from 'src/app/services/ygg-torrent.service';
-import { DownloadService } from 'src/app/services/download.service';
+import {YggTorrentService} from 'src/app/services/ygg-torrent.service';
 
 @Component({
-	selector: 'app-result',
-	templateUrl: './result.component.html',
-	styleUrls: ['./result.component.scss']
+    selector: 'app-result',
+    templateUrl: './result.component.html',
+    styleUrls: ['./result.component.scss']
 })
 export class ResultComponent {
 
-	@Input() result!: TorrentResult;
+    @Input() result!: TorrentResult;
 
-	Speed = (Speed as any).Speed;
+    Speed = (Speed as any).Speed;
 
-  loading?: boolean;
+    loading?: boolean;
 
-	constructor(private yggTorrentService: YggTorrentService) { }
+    constructor(private yggTorrentService: YggTorrentService) {
+    }
 
-	onDownloadClicked() {
-    this.yggTorrentService.download(this.result.id).subscribe();
-	}
+    onDownloadClicked() {
+        this.yggTorrentService.download(this.result.id).subscribe();
+    }
 }

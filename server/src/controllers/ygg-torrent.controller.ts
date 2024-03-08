@@ -1,33 +1,38 @@
 import {YggTorrentService} from "../services/ygg-torrent.service.js";
 import log from "../../../common/utils/logger.js";
-import {DownloadService} from "../services/download.service.js";
-import {Controller, Get, Params, Post} from "@decorators/express";
-import {Response} from "@decorators/express/lib/src/decorators/params.js";
+import {Controller, Get, Post} from "../di/express/express.decorators.js";
 
 const { Logger } = log;
 
 @Controller('/yggtorrent')
 export class YggTorrentController {
 
-    constructor(private readonly yggTorrentService: YggTorrentService,
-                private readonly downloadService: DownloadService) {
+    constructor(private readonly yggTorrentService: YggTorrentService) {
     }
 
-    @Get('/:title')
-    async find(@Response() res: any, @Params('title') title: string) {
-        Logger.log(`GET /yggtorrent/${title}`)
+    @Get('/test')
+    async test(req: any, res: any) {
+        Logger.log(`GET /yggtorrent/test`)
 
         return res
             .status(200)
-            .json(await this.yggTorrentService.find(title));
+            .json(await this.yggTorrentService.test());
+    }
+
+    @Get('/:title')
+    async find(req: any, res: any) {
+        Logger.log(`GET /yggtorrent/${req.params.title}`)
+
+        return res
+            .status(200)
+            .json(await this.yggTorrentService.find(req.params.title));
     }
 
     @Post('/download/:id')
     async download(req: any, res: any) {
         Logger.log(`GET /yggtorrent/download/${req.params.id}`)
 
-        const torrent = await this.yggTorrentService.getTorrent(req.params.id);
-        this.downloadService.startDownload(torrent);
+        await this.yggTorrentService.download(req.params.id);
 
         return res
             .status(200)

@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { DownloadService } from './services/download.service';
+import {Component} from '@angular/core';
 
 @Component({
 	selector: 'app-root',
@@ -8,6 +7,6 @@ import { DownloadService } from './services/download.service';
 })
 export class AppComponent {
 
-	constructor(private downloadService: DownloadService) { }
+	constructor() { }
 
 }

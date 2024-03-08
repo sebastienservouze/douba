@@ -1,10 +1,10 @@
+import 'reflect-metadata';
 import express, {Express} from "express";
 import config from '../../config/config.js';
 import cors from 'cors';
-import {YggTorrentController} from "./controllers/ygg-torrent.controller.js";
 import log from "../../common/utils/logger.js";
 import fs from "fs";
-import {attachControllers} from "@decorators/express";
+import {Routes} from "./routes.js";
 
 const {Logger} = log;
 const {Config} = config;
@@ -27,7 +27,8 @@ export async function startServer() {
     app.use(express.json())
     app.use(cors({origin: '*'}));
 
-    await attachControllers(app, [YggTorrentController]);
+    // Register the controllers
+    Routes.registerAll(app);
 
     app.listen(Config.apiPort, () => {
         Logger.log(`Le serveur écoute sur le port http://localhost:${Config.apiPort}`);

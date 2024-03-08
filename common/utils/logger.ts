@@ -2,17 +2,17 @@ export class Logger {
 
     public static log(message?: string, ...optionalParams: any[]): void {
         if (optionalParams.length) {
-            console.log(this.getFormattedMessage(message), optionalParams);
+            console.log(Logger.getFormattedMessage(message), optionalParams);
         } else {
-            console.log(this.getFormattedMessage(message));
+            console.log(Logger.getFormattedMessage(message));
         }
     }
 
     public static error(message?: string, ...optionalParams: any[]): void {
         if (optionalParams.length) {
-            console.error(this.getFormattedMessage(message), optionalParams);
+            console.error(Logger.getFormattedMessage(message), optionalParams);
         } else {
-            console.error(this.getFormattedMessage(message));
+            console.error(Logger.getFormattedMessage(message));
         }
     }
 
