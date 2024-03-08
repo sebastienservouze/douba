@@ -2,8 +2,6 @@ import {Injectable} from '@angular/core';
 import {WebSocketSubject} from "rxjs/webSocket";
 import {Config} from "../../../../config/config";
 import {filter, map, Observable} from "rxjs";
-import {Download} from "../../../../common/models/download.model";
-import {Dummy} from "../../../../common/models/dummy.model";
 import {Packet} from "../../../../common/models/packet.model";
 import {PacketType} from "../../../../common/enums/packets.enum";
 

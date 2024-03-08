@@ -3,7 +3,7 @@ import WebTorrent, {Torrent} from "webtorrent";
 import log from "../../../common/utils/logger.js";
 import {DownloadUtils} from "../utils/download.utils.js";
 import {Download} from "../../../common/models/download.model.js";
-import {WebSocketService} from "../websocket/web-socket.service.js";
+import {WebSocketService} from "./web-socket.service.js";
 import {Dependency} from "../di/dependency.js";
 import {PacketType} from "../../../common/enums/packets.enum.js";
 
